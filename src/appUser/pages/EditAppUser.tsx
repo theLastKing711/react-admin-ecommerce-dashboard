@@ -1,56 +1,36 @@
 import {
-  Create,
   Edit,
-  FileField,
-  FileInput,
-  ImageField,
   ImageInput,
   SimpleForm,
   TextInput,
-  useCreate,
-  useUpdate,
+  maxLength,
+  minLength,
+  required,
 } from "react-admin";
-import { APP_USER_ROUTE } from "../appUser.constants";
-import { UpdateAppUserDto } from "../appUser.types";
 import { StyledImageField } from "../../shared/components/StyledImageField";
 import { Typography } from "@mui/material";
+import { validateUpdateUsernameUnicity } from "../appUser.validationHelpers";
 import { useParams } from "react-router-dom";
 
-const acceptedFileTypes = [".jpg", ".png"];
-
 const EditAppUser = () => {
-  const [approve, { data, isLoading, isError }] = useUpdate<UpdateAppUserDto>(
-    APP_USER_ROUTE,
-    {
-      data: {
-        userName: "",
-        password: "",
-        file: undefined,
-      },
-    }
-  );
+  const { id = "1" } = useParams();
+
+  const validateFirstName = [
+    required(),
+    minLength(2),
+    maxLength(15),
+    validateUpdateUsernameUnicity(+id),
+  ];
+  const validatePassword = [required(), minLength(8)];
 
   return (
     <Edit>
       <SimpleForm>
-        <TextInput
-          source="userName"
-          validate={(value) => {
-            console.log("value");
-            if (!value) {
-              return "Username field is required";
-            }
-          }}
-        />
+        <TextInput source="userName" validate={validateFirstName} />
         <TextInput
           source="password"
           type="password"
-          validate={(value: string) => {
-            console.log("value", value);
-            if (value && value.length <= 8) {
-              return "Password lenght must be at least 8 characters";
-            }
-          }}
+          validate={validatePassword}
         />
         <ImageInput
           source="file"
