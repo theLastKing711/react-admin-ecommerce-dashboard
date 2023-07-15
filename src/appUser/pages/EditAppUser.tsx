@@ -9,7 +9,7 @@ import {
 } from "react-admin";
 import { StyledImageField } from "../../shared/components/StyledImageField";
 import { Typography } from "@mui/material";
-import { validateUpdateUsernameUnicity } from "../appUser.validationHelpers";
+import { validateAppUserUpdatedUserNameUnicity } from "../appUser.validationHelpers";
 import { useParams } from "react-router-dom";
 
 const EditAppUser = () => {
@@ -19,26 +19,21 @@ const EditAppUser = () => {
     required(),
     minLength(2),
     maxLength(15),
-    validateUpdateUsernameUnicity(+id),
+    validateAppUserUpdatedUserNameUnicity(+id),
   ];
-  const validatePassword = [required(), minLength(8)];
 
   return (
     <Edit>
       <SimpleForm>
         <TextInput source="userName" validate={validateFirstName} />
-        <TextInput
-          source="password"
-          type="password"
-          validate={validatePassword}
-        />
+        <TextInput source="password" type="password" />
         <ImageInput
           source="file"
           label="profile picture"
           isRequired={false}
           maxSize={1024 * 1024 * 4}
         >
-          <StyledImageField source="src" title="user profile picture" />
+          <StyledImageField source="src" title="profile picture" />
         </ImageInput>
         <Typography
           component="h2"
@@ -48,7 +43,7 @@ const EditAppUser = () => {
         >
           old Profile Picture
         </Typography>
-        <StyledImageField source="imagePath" title="user profile" />
+        <StyledImageField source="imagePath" title="old user profile" />
       </SimpleForm>
     </Edit>
   );

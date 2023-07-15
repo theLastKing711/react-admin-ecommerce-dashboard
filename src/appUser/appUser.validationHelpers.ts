@@ -1,8 +1,9 @@
 import { ValidationErrorMessage, fetchUtils } from "react-admin";
+import { APP_USER_ROUTE } from "./appUser.constants";
 
-const userApiUrl = 'http://localhost:3000/app-user';
+const userApiUrl = `http://localhost:3000/${APP_USER_ROUTE}`;
 
-export const validateUpdateUsernameUnicity = (id: number) => async (name: string) => {
+export const validateAppUserUpdatedUserNameUnicity = (id: number) => async (name: string) => {
 
     const httpClient = fetchUtils.fetchJson;
     
@@ -27,7 +28,7 @@ export const validateUpdateUsernameUnicity = (id: number) => async (name: string
     return undefined;
 };
 
-export const validateCreatedUsernameUnicity = async (name: string):
+export const validateAppUserCreatedUserNameUnicity = async (name: string):
         Promise<ValidationErrorMessage | null | undefined> => {
 
     const httpClient = fetchUtils.fetchJson;

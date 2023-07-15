@@ -7,14 +7,14 @@ import {
   minLength,
   required,
 } from "react-admin";
-import { validateCreatedUsernameUnicity } from "../appUser.validationHelpers";
+import { validateAppUserCreatedUserNameUnicity } from "../appUser.validationHelpers";
 import { StyledImageField } from "../../shared/components/StyledImageField";
 
 const validateFirstName = [
   required(),
   minLength(2),
   maxLength(15),
-  validateCreatedUsernameUnicity,
+  validateAppUserCreatedUserNameUnicity,
 ];
 const validatePassword = [required(), minLength(8)];
 

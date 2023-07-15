@@ -1,6 +1,8 @@
 import crudProvider from 'ra-data-nestjsx-crud';
 import { fetchUtils, withLifecycleCallbacks } from "react-admin";
 import { APP_USER_ROUTE } from '../appUser/appUser.constants';
+import { CATEGORY_ROUTE } from '../category/category.constants';
+import { PRODUCT_ROUTE } from '../product/product.constants';
 
 
 const multipartFetch = (url: string, options: fetchUtils.Options = {}) => {
@@ -13,8 +15,8 @@ const multipartFetch = (url: string, options: fetchUtils.Options = {}) => {
     // customHeaders.set('Content-Type', 'multipart/form-data;boundary=<calculated when request is sent>');
     // console.log('options before', options);
     // console.log('options after', options)
-    console.log('options', options);
-    console.log('url', url);
+    // console.log('options', options);
+    // console.log('url', url);
     return fetchUtils.fetchJson(url, options);
 }
 
@@ -88,7 +90,7 @@ export const myDataProfider = {
             formData.append('password', params.data.password);
             formData.append('file', params.data.file.rawFile);
 
-            return multipartFetch(`http://localhost:3000/app-user`, {
+            return multipartFetch(`http://localhost:3000/${APP_USER_ROUTE}`, {
                 method: 'POST',
                 body: formData,
             }).then(({ json }) => ({
@@ -96,6 +98,38 @@ export const myDataProfider = {
             }));
         }
         
+
+        if(resource === CATEGORY_ROUTE)
+        {
+            const formData = new FormData();
+
+            formData.append('name', params.data.name);
+            formData.append('file', params.data.file.rawFile);
+
+            return multipartFetch(`http://localhost:3000/${CATEGORY_ROUTE}`, {
+                method: 'POST',
+                body: formData,
+            }).then(({ json }) => ({
+                data: { ...params.data, id: json.id },
+            }));
+        }
+
+        if(resource === PRODUCT_ROUTE)
+        {
+            const formData = new FormData();
+
+            formData.append('name', params.data.name);
+            formData.append('categoryId', params.data.categoryId);
+            formData.append('price', params.data.price);
+            formData.append('file', params.data.file.rawFile);
+
+            return multipartFetch(`http://localhost:3000/${PRODUCT_ROUTE}`, {
+                method: 'POST',
+                body: formData,
+            }).then(({ json }) => ({
+                data: { ...params.data, id: json.id },
+            }));
+        }
 
         return customDataProvider.create(resource, params);
 
@@ -117,7 +151,7 @@ export const myDataProfider = {
                 formData.append('file', params.data.file.rawFile);
             }
 
-            return multipartFetch(`http://localhost:3000/app-user/${params.data.id}`, {
+            return multipartFetch(`http://localhost:3000/${APP_USER_ROUTE}/${params.data.id}`, {
                 method: 'PATCH',
                 body: formData,
             }).then(({ json }) => ({
@@ -125,9 +159,55 @@ export const myDataProfider = {
             }));
         }
         
+        if(resource === CATEGORY_ROUTE)
+        {
+            const formData = new FormData();
+
+            formData.append('name', params.data.name);
+            if(params.data.file?.rawFile)
+            {
+                formData.append('file', params.data.file.rawFile);
+            }
+
+            return multipartFetch(`http://localhost:3000/${CATEGORY_ROUTE}/${params.data.id}`, {
+                method: 'PATCH',
+                body: formData,
+            }).then(({ json }) => ({
+                data: { ...params.data, id: json.id },
+            }));
+        }
+
+        if(resource === PRODUCT_ROUTE)
+        {
+            const formData = new FormData();
+
+            formData.append('name', params.data.name);
+            formData.append('categoryId', params.data.categoryId);
+            formData.append('price', params.data.price);
+            
+            if(params.data.file?.rawFile)
+            {
+                formData.append('file', params.data.file.rawFile);
+            }
+
+            return multipartFetch(`http://localhost:3000/${PRODUCT_ROUTE}/${params.data.id}`, {
+                method: 'PATCH',
+                body: formData,
+            }).then(({ json }) => ({
+                data: { ...params.data, id: json.id },
+            }));
+        }
 
         return customDataProvider.create(resource, params);
 
+    },
+    getCategoriesDropdownList: () => {
+        return fetch(`http://localhost:3000/${CATEGORY_ROUTE}/list`, { method: 'GET' })
+            .then(response => response.json());
+    },
+    getProductsWithCategoryIdDropDownList: () => {
+        return fetch(`http://localhost:3000/${PRODUCT_ROUTE}/list-with-category`, { method: 'GET' })
+            .then(response => response.json());
     },
 
 };
