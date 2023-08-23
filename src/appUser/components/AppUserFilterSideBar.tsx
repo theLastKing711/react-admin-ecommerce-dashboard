@@ -19,12 +19,12 @@ export const AppUserFilterSideBar = () => (
       </FilterList>
       <FilterList label="Has Purchased" icon={<ShoppingCartIcon />}>
         <FilterListItem
-          label="Last month"
-          value={{ has_purchased: "last month" }}
+          label="This month"
+          value={{ has_purchased: "this month" }}
         />
         <FilterListItem
-          label="Since account created"
-          value={{ has_purchased: "since account creation" }}
+          label="This year"
+          value={{ has_purchased: "this year" }}
         />
       </FilterList>
     </CardContent>

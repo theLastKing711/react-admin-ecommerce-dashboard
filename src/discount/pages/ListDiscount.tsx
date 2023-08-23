@@ -8,10 +8,11 @@ import {
   SimpleList,
 } from "react-admin";
 import { DISCOUNT_ROUTE } from "../discount.constants";
-import DiscountFilterSideBar from "../components/DiscountFilterSideBar";
+
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CustomPagination from "../../shared/components/CustomPagination";
+import { DiscountFilterSideBar } from "../components/DiscountFilterSideBar";
 
 const sort = { field: "id", order: "ASC" };
 
@@ -32,17 +33,19 @@ const ListDiscount = () => {
     >
       {isMeduimAndDown ? (
         <SimpleList
-          primaryText={(record) => record.userName}
-          secondaryText={(record) => record.id}
+          primaryText={(record) => record.product.name}
+          secondaryText={(record) => record.value}
           tertiaryText={(record) =>
-            new Date(record.createdAt).toLocaleDateString()
+            new Date(record.endDate).toLocaleDateString()
           }
         />
       ) : (
         <Datagrid>
           <TextField source="id" />
-          <TextField source="userName" />
-          <DateField source="createdAt" />
+          <TextField source="product.name" />
+          <TextField source="value" />
+          <DateField source="startDate" />
+          <DateField source="endDate" />
           <EditButton />
         </Datagrid>
       )}

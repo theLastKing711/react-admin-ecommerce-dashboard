@@ -7,11 +7,13 @@ interface Props<T> {
     "renderInput"
   >;
   UseInputProps: InputProps;
+  label: string;
 }
 
 const AdminCustomMaterialGroupSelect = <T,>({
   autoCompleteProps,
   UseInputProps,
+  label,
 }: Props<T>) => {
   const {
     field,
@@ -22,26 +24,29 @@ const AdminCustomMaterialGroupSelect = <T,>({
     ...UseInputProps,
   });
 
-  console.log("use input props", UseInputProps);
-
   console.log("field", field);
 
   return (
     <Autocomplete
       {...field}
-      id="grouped-demo"
-      sx={{ width: 300 }}
+      onChange={(event, value) => {
+        console.log("onchangess event", event);
+        console.log("onchangess value", value);
+        field.onChange(value);
+      }}
+      value={field.value}
+      sx={{ width: 300, marginBottom: "1.5rem" }}
       {...autoCompleteProps}
       renderInput={(params) => (
         <TextField
           {...params}
-          {...field}
-          label="With categories"
+          label={label}
           error={(isTouched || isSubmitted) && invalid}
           helperText={
-            (isTouched || isSubmitted) && invalid ? error?.message : ""
+            (isTouched || isSubmitted) && invalid
+              ? (error?.message as unknown as { message: string })?.message
+              : ""
           }
-          required={isRequired}
         />
       )}
     />
